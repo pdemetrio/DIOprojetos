@@ -27,3 +27,5 @@ print (type(str(10.23)))
 nomes = input ('Informe seu nome: ')
 print(f'olá {nomes}')
 
+
+
