@@ -1,2 +1,3 @@
 # DIOprojetos
-Desafio de projetos da DIO
+
+Repositório para desafios da DIO, aqui vou entregar todos os meus projetos.
