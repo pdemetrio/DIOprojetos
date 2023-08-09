@@ -63,3 +63,4 @@ create table dependent(
 
 show tables;
 desc dependent;
+
