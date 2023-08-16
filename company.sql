@@ -12,7 +12,7 @@ create table employee(
     Salary decimal(10,2),
     Super_ssn char(9),
     Dno int not null,
-    primary key (Ssn)
+	primary key (Ssn)
 );
 
 create table departament(
@@ -63,4 +63,7 @@ create table dependent(
 
 show tables;
 desc dependent;
+
+select * from information_schema.referential_constraints
+	where constraint_schema = 'company';
 
