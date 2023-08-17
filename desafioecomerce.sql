@@ -91,12 +91,11 @@ create table seller(
     constraint unique_cnpj_seller unique (CNPJ),
     constraint unique_cpf_seller unique (CPF)
 );
+desc seller;
 
 alter table seller auto_increment=1;
 
-
 -- tabelas de relacionamentos M:N
-
 create table productSeller(
 	idPseller int,
     idPproduct int,
@@ -114,6 +113,7 @@ create table productOrder(
     poStatus enum('Disponível', 'Sem estoque') default 'Disponível',
     primary key (idPOproduct, idPOorder)
 );
+desc productOrder;
 
 create table storageLocation(
 	idLproduct int,
@@ -121,6 +121,7 @@ create table storageLocation(
     location varchar(255) not null,
     primary key (idLproduct, idLstorage)
 );
+desc storageLocation;
 
 create table productSupplier(
 	idPsSupplier int,
@@ -128,20 +129,17 @@ create table productSupplier(
     quantity int not null,
     primary key (idPsSupplier, idPsProduct)
 );
-
 desc productSupplier;
 
 show tables;
-
 show databases;
+
 use information_schema;
 show tables;
 desc referential_constraints;
 select * from referential_constraints where constraint_schema = 'ecommerce';
 
-
 -- inserção de dados e queries
-use ecommerce;
 
 show tables;
 -- idClient, Fname, Minit, Lname, CPF, Address
@@ -153,6 +151,7 @@ insert into clients (Fname, Minit, Lname, CPF, Address)
 			 ('Roberta','G','Assis', 98745631,'avenidade koller 19, Centro - Cidade das flores'),
 			 ('Isabela','M','Cruz', 654789123,'rua alemeda das flores 28, Centro - Cidade das flores');
 
+select * from clients;
 
 -- idProduct, Pname, classification_kids boolean, category('Eletrônico','Vestuário','Brinquedos','Alimentos','Móveis'), avaliação, size
 insert into product (Pname, classification_kids, category, avaliação, size) values
@@ -164,11 +163,9 @@ insert into product (Pname, classification_kids, category, avaliação, size) va
                               ('Farinha de arroz',False,'Alimentos','2',null),
                               ('Fire Stick Amazon',False,'Eletrônico','3',null);
 
-select * from clients;
 select * from product;
 -- idOrder, idOrderClient, orderStatus, orderDescription, sendValue, paymentCash
 
-delete from orders where idOrderClient in  (1,2,3,4);
 insert into orders (idOrderClient, orderStatus, orderDescription, sendValue, paymentCash) values 
 							 (1, default,'compra via aplicativo',null,1),
                              (2,default,'compra via aplicativo',50,0),
@@ -181,6 +178,7 @@ insert into productOrder (idPOproduct, idPOorder, poQuantity, poStatus) values
 						 (1,5,2,null),
                          (2,5,1,null),
                          (3,6,1,null);
+select * from productOrder;
 
 -- storageLocation,quantity
 insert into productStorage (storageLocation,quantity) values 
@@ -191,18 +189,21 @@ insert into productStorage (storageLocation,quantity) values
                             ('São Paulo',10),
                             ('Brasília',60);
 
+select * from productStorage;
+
 -- idLproduct, idLstorage, location
 insert into storageLocation (idLproduct, idLstorage, location) values
 						 (1,2,'RJ'),
                          (2,6,'GO');
+select * from storageLocation;
 
 -- idSupplier, SocialName, CNPJ, contact
 insert into supplier (SocialName, CNPJ, contact) values 
 							('Almeida e filhos', 123456789123456,'21985474'),
                             ('Eletrônicos Silva',854519649143457,'21985484'),
                             ('Eletrônicos Valma', 934567893934695,'21975474');
-                            
 select * from supplier;
+
 -- idPsSupplier, idPsProduct, quantity
 insert into productSupplier (idPsSupplier, idPsProduct, quantity) values
 						 (1,1,500),
@@ -210,28 +211,29 @@ insert into productSupplier (idPsSupplier, idPsProduct, quantity) values
                          (2,4,633),
                          (3,3,5),
                          (2,5,10);
+select * from productSupplier;
 
 -- idSeller, SocialName, AbstName, CNPJ, CPF, location, contact
 insert into seller (SocialName, AbstName, CNPJ, CPF, location, contact) values 
 						('Tech eletronics', null, 123456789456321, null, 'Rio de Janeiro', 219946287),
 					    ('Botique Durgas',null,null,123456783,'Rio de Janeiro', 219567895),
 						('Kids World',null,456789123654485,null,'São Paulo', 1198657484);
-
 select * from seller;
+
 -- idPseller, idPproduct, prodQuantity
 insert into productSeller (idPseller, idPproduct, prodQuantity) values 
 						 (1,6,80),
                          (2,7,10);
-
 select * from productSeller;
+
+-- Respondendo algumas perguntas do desafio
 
 select count(*) from clients;
 select * from clients c, orders o where c.idClient = idOrderClient;
-
 select Fname,Lname, idOrder, orderStatus from clients c, orders o where c.idClient = idOrderClient;
 select concat(Fname,' ',Lname) as Client, idOrder as Request, orderStatus as Status from clients c, orders o where c.idClient = idOrderClient;
 
-insert into orders (idOrderClient, orderStatus, orderDescription, sendValue, paymentCash) values 
+insert into orders (idOrderClient, orderStatus, orderDescription, sendValue, paymentCash) values
 							 (2, default,'compra via aplicativo',null,1);
                              
 select count(*) from clients c, orders o 
@@ -251,3 +253,4 @@ select c.*, o.*, p.*
 select c.idClient, Fname, count(*) as Number_of_orders from clients c 
 				inner join orders o ON c.idClient = o.idOrderClient
 		group by idClient; 
+        
